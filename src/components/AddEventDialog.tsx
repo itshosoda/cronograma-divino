@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -24,6 +24,8 @@ interface AddEventDialogProps {
   isOpen: boolean;
   onOpenChange: (open: boolean) => void;
   onAddEvent: (event: Omit<Event, 'id'>) => void;
+  onUpdateEvent?: (event: Event) => void;
+  editingEvent?: Event | null;
   selectedDate: string;
   timeSlots: { id: string; label: string }[];
 }
@@ -32,6 +34,8 @@ export const AddEventDialog = ({
   isOpen,
   onOpenChange,
   onAddEvent,
+  onUpdateEvent,
+  editingEvent,
   selectedDate,
   timeSlots,
 }: AddEventDialogProps) => {
@@ -42,6 +46,25 @@ export const AddEventDialog = ({
     description: '',
   });
 
+  // Populate form when editing
+  useEffect(() => {
+    if (editingEvent) {
+      setFormData({
+        type: editingEvent.type,
+        title: editingEvent.title,
+        timeSlot: editingEvent.timeSlot,
+        description: editingEvent.description || '',
+      });
+    } else {
+      setFormData({
+        type: '',
+        title: '',
+        timeSlot: '',
+        description: '',
+      });
+    }
+  }, [editingEvent, isOpen]);
+
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     
@@ -49,13 +72,25 @@ export const AddEventDialog = ({
       return;
     }
 
-    onAddEvent({
-      type: formData.type,
-      title: formData.title,
-      timeSlot: formData.timeSlot,
-      date: selectedDate,
-      description: formData.description,
-    });
+    if (editingEvent && onUpdateEvent) {
+      // Update existing event
+      onUpdateEvent({
+        ...editingEvent,
+        type: formData.type,
+        title: formData.title,
+        timeSlot: formData.timeSlot,
+        description: formData.description,
+      });
+    } else {
+      // Add new event
+      onAddEvent({
+        type: formData.type,
+        title: formData.title,
+        timeSlot: formData.timeSlot,
+        date: selectedDate,
+        description: formData.description,
+      });
+    }
 
     // Reset form
     setFormData({
@@ -83,10 +118,10 @@ export const AddEventDialog = ({
       <DialogContent className="sm:max-w-[425px]">
         <DialogHeader>
           <DialogTitle className="text-xl font-bold bg-gradient-spiritual bg-clip-text text-transparent">
-            Adicionar Novo Evento
+            {editingEvent ? 'Editar Evento' : 'Adicionar Novo Evento'}
           </DialogTitle>
           <DialogDescription>
-            Preencha as informações para criar um novo evento na programação.
+            {editingEvent ? 'Modifique as informações do evento.' : 'Preencha as informações para criar um novo evento na programação.'}
           </DialogDescription>
         </DialogHeader>
         
@@ -165,7 +200,7 @@ export const AddEventDialog = ({
               className="bg-gradient-spiritual hover:bg-gradient-divine"
               disabled={!formData.type || !formData.title || !formData.timeSlot}
             >
-              Adicionar Evento
+              {editingEvent ? 'Salvar Alterações' : 'Adicionar Evento'}
             </Button>
           </DialogFooter>
         </form>

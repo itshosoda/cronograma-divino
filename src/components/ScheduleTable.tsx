@@ -2,7 +2,7 @@ import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { CalendarDays, Clock, Plus, Edit } from "lucide-react";
+import { CalendarDays, Clock, Plus, Edit, Trash2 } from "lucide-react";
 import { AddEventDialog } from "@/components/AddEventDialog";
 
 export interface Event {
@@ -32,6 +32,7 @@ const ScheduleTable = () => {
   const [events, setEvents] = useState<Event[]>([]);
   const [selectedDate, setSelectedDate] = useState(0);
   const [isAddDialogOpen, setIsAddDialogOpen] = useState(false);
+  const [editingEvent, setEditingEvent] = useState<Event | null>(null);
 
   // Generate 30 days starting from today
   const generateDates = () => {
@@ -61,6 +62,22 @@ const ScheduleTable = () => {
       id: Date.now().toString(),
     };
     setEvents([...events, event]);
+  };
+
+  const updateEvent = (updatedEvent: Event) => {
+    setEvents(events.map(event => 
+      event.id === updatedEvent.id ? updatedEvent : event
+    ));
+    setEditingEvent(null);
+  };
+
+  const deleteEvent = (eventId: string) => {
+    setEvents(events.filter(event => event.id !== eventId));
+  };
+
+  const handleEditEvent = (event: Event) => {
+    setEditingEvent(event);
+    setIsAddDialogOpen(true);
   };
 
   const formatDate = (date: Date) => {
@@ -161,15 +178,32 @@ const ScheduleTable = () => {
                           {slotEvents.length > 0 ? (
                             <div className="flex flex-wrap gap-2">
                               {slotEvents.map((event) => (
-                                <Badge 
-                                  key={event.id} 
-                                  className={`${eventTypes[event.type].color} px-3 py-2 text-sm font-medium`}
-                                >
-                                  <div className="flex items-center gap-1">
-                                    {eventTypes[event.type].label}: {event.title}
-                                    <Edit className="h-3 w-3 ml-1 opacity-70" />
-                                  </div>
-                                </Badge>
+                                 <div 
+                                   key={event.id} 
+                                   className={`${eventTypes[event.type].color} px-3 py-2 text-sm font-medium rounded-md flex items-center gap-2`}
+                                 >
+                                   <span>
+                                     {eventTypes[event.type].label}: {event.title}
+                                   </span>
+                                   <div className="flex items-center gap-1">
+                                     <Button
+                                       size="sm"
+                                       variant="ghost"
+                                       className="h-6 w-6 p-0 hover:bg-white/20"
+                                       onClick={() => handleEditEvent(event)}
+                                     >
+                                       <Edit className="h-3 w-3" />
+                                     </Button>
+                                     <Button
+                                       size="sm"
+                                       variant="ghost"
+                                       className="h-6 w-6 p-0 hover:bg-red-500/20"
+                                       onClick={() => deleteEvent(event.id)}
+                                     >
+                                       <Trash2 className="h-3 w-3" />
+                                     </Button>
+                                   </div>
+                                 </div>
                               ))}
                             </div>
                           ) : (
@@ -190,8 +224,13 @@ const ScheduleTable = () => {
 
       <AddEventDialog
         isOpen={isAddDialogOpen}
-        onOpenChange={setIsAddDialogOpen}
+        onOpenChange={(open) => {
+          setIsAddDialogOpen(open);
+          if (!open) setEditingEvent(null);
+        }}
         onAddEvent={addEvent}
+        onUpdateEvent={updateEvent}
+        editingEvent={editingEvent}
         selectedDate={currentDate.toISOString().split('T')[0]}
         timeSlots={timeSlots}
       />
