@@ -35,13 +35,21 @@ const ScheduleTable = () => {
   const [isAddDialogOpen, setIsAddDialogOpen] = useState(false);
   const [editingEvent, setEditingEvent] = useState<Event | null>(null);
 
-  // Generate 30 days starting from today
+  // Generate 30 days starting from today, organized by weeks (Monday to Sunday)
   const generateDates = () => {
     const dates = [];
     const today = new Date();
+    
+    // Find the Monday of the current week
+    const dayOfWeek = today.getDay();
+    const mondayOffset = dayOfWeek === 0 ? -6 : 1 - dayOfWeek; // Sunday = 0, so we need -6
+    const startDate = new Date(today);
+    startDate.setDate(today.getDate() + mondayOffset);
+    
+    // Generate 30 days from the Monday of current week
     for (let i = 0; i < 30; i++) {
-      const date = new Date(today);
-      date.setDate(today.getDate() + i);
+      const date = new Date(startDate);
+      date.setDate(startDate.getDate() + i);
       dates.push(date);
     }
     return dates;
@@ -130,7 +138,7 @@ const ScheduleTable = () => {
               </Button>
             </div>
             
-            <div className="grid grid-cols-2 md:grid-cols-5 lg:grid-cols-7 gap-2">
+            <div className="grid grid-cols-7 gap-2">
               {dates.map((date, index) => (
                 <Button
                   key={index}

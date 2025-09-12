@@ -128,7 +128,7 @@ export const AddEventDialog = ({
         <form onSubmit={handleSubmit}>
           <div className="grid gap-4 py-4">
             <div className="space-y-2">
-              <Label htmlFor="type">Tipo de Evento</Label>
+              <Label htmlFor="type">Cronograma</Label>
               <Select 
                 value={formData.type} 
                 onValueChange={(value: Event['type']) => 
@@ -148,7 +148,7 @@ export const AddEventDialog = ({
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="title">Título do Evento</Label>
+              <Label htmlFor="title">Vocacionado</Label>
               <Input
                 id="title"
                 value={formData.title}
