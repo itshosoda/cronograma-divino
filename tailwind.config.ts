@@ -47,6 +47,10 @@ export default {
           DEFAULT: "hsl(var(--card))",
           foreground: "hsl(var(--card-foreground))",
         },
+        'spiritual-blue': 'hsl(var(--spiritual-blue))',
+        'divine-gold': 'hsl(var(--divine-gold))',
+        'holy-purple': 'hsl(var(--holy-purple))',
+        'celestial-light': 'hsl(var(--celestial-light))',
         sidebar: {
           DEFAULT: "hsl(var(--sidebar-background))",
           foreground: "hsl(var(--sidebar-foreground))",
@@ -62,6 +66,18 @@ export default {
         lg: "var(--radius)",
         md: "calc(var(--radius) - 2px)",
         sm: "calc(var(--radius) - 4px)",
+      },
+      backgroundImage: {
+        'gradient-spiritual': 'var(--gradient-spiritual)',
+        'gradient-divine': 'var(--gradient-divine)',
+        'gradient-celestial': 'var(--gradient-celestial)',
+      },
+      boxShadow: {
+        'holy': 'var(--shadow-holy)',
+        'divine': 'var(--shadow-divine)',
+      },
+      transitionProperty: {
+        'smooth': 'var(--transition-smooth)',
       },
       keyframes: {
         "accordion-down": {
