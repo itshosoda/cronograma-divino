@@ -17,7 +17,7 @@ All colors MUST be HSL.
     --popover: 0 0% 100%;
     --popover-foreground: 237 84% 15%;
 
-    --primary: 237 85% 55%;
+    --primary: 210 100% 75%;
     --primary-foreground: 0 0% 100%;
 
     --secondary: 45 93% 85%;
@@ -26,7 +26,7 @@ All colors MUST be HSL.
     --muted: 237 20% 96%;
     --muted-foreground: 237 16% 46%;
 
-    --accent: 271 81% 75%;
+    --accent: 0 84% 60%;
     --accent-foreground: 0 0% 100%;
 
     --destructive: 0 84% 60%;
@@ -37,12 +37,12 @@ All colors MUST be HSL.
     --ring: 237 85% 55%;
 
     /* Custom design tokens */
-    --spiritual-blue: 237 85% 55%;
-    --divine-gold: 45 93% 70%;
-    --holy-purple: 271 81% 75%;
-    --celestial-light: 237 50% 98%;
+    --spiritual-blue: 210 100% 75%;
+    --divine-gold: 0 84% 60%;
+    --holy-purple: 210 100% 75%;
+    --celestial-light: 210 50% 98%;
     
-    --gradient-spiritual: linear-gradient(135deg, hsl(var(--spiritual-blue)), hsl(var(--holy-purple)));
+    --gradient-spiritual: linear-gradient(135deg, hsl(var(--spiritual-blue)), hsl(var(--divine-gold)));
     --gradient-divine: linear-gradient(45deg, hsl(var(--divine-gold)), hsl(var(--spiritual-blue)));
     --gradient-celestial: linear-gradient(180deg, hsl(var(--celestial-light)), hsl(var(--muted)));
     
@@ -100,9 +100,9 @@ All colors MUST be HSL.
     --ring: 237 85% 65%;
 
     /* Dark mode custom tokens */
-    --spiritual-blue: 237 85% 65%;
-    --divine-gold: 45 93% 75%;
-    --holy-purple: 271 81% 65%;
+    --spiritual-blue: 210 100% 80%;
+    --divine-gold: 0 84% 65%;
+    --holy-purple: 210 100% 80%;
     --celestial-light: 237 84% 8%;
     --sidebar-background: 240 5.9% 10%;
     --sidebar-foreground: 240 4.8% 95.9%;

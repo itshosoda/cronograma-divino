@@ -4,6 +4,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { CalendarDays, Clock, Plus, Edit, Trash2 } from "lucide-react";
 import { AddEventDialog } from "@/components/AddEventDialog";
+import logoIgreja from "@/assets/logo-igreja.png";
 
 export interface Event {
   id: string;
@@ -94,14 +95,22 @@ const ScheduleTable = () => {
       <div className="max-w-7xl mx-auto space-y-6">
         {/* Header */}
         <Card className="shadow-holy">
-          <CardHeader className="text-center bg-gradient-spiritual text-white rounded-t-lg">
-            <CardTitle className="text-3xl font-bold flex items-center justify-center gap-3">
-              <CalendarDays className="h-8 w-8" />
-              Programação de Cultos
-            </CardTitle>
-            <p className="text-white/90 text-lg">
-              Organize sua agenda espiritual com facilidade
-            </p>
+          <CardHeader className="bg-gradient-spiritual text-white rounded-t-lg">
+            <div className="flex justify-between items-center">
+              <div className="flex items-center gap-3">
+                <CalendarDays className="h-8 w-8" />
+                <CardTitle className="text-3xl font-bold">
+                  Programação de Cultos
+                </CardTitle>
+              </div>
+              <div className="flex-shrink-0">
+                <img 
+                  src={logoIgreja} 
+                  alt="Logo Igreja Metodista Wesleyana" 
+                  className="h-16 w-auto"
+                />
+              </div>
+            </div>
           </CardHeader>
         </Card>
 
