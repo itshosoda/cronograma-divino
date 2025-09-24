@@ -15,12 +15,20 @@ export interface Event {
   description?: string;
 }
 
-const timeSlots = [
-  { id: '19:00-20:30', label: '19:00 - 20:30' },
-  { id: '20:30-21:00', label: '20:30 - 21:00' },
-  { id: '21:00-21:30', label: '21:00 - 21:30' },
-  { id: '21:31-22:00', label: '21:31 - 22:00' },
-];
+const timeSlots = {
+  manha: [
+    { id: '08:00-09:00', label: '08:00 - 09:00' },
+    { id: '09:00-10:00', label: '09:00 - 10:00' },
+    { id: '10:00-11:00', label: '10:00 - 11:00' },
+    { id: '11:00-12:00', label: '11:00 - 12:00' },
+  ],
+  noite: [
+    { id: '19:00-20:30', label: '19:00 - 20:30' },
+    { id: '20:30-21:00', label: '20:30 - 21:00' },
+    { id: '21:00-21:30', label: '21:00 - 21:30' },
+    { id: '21:31-22:00', label: '21:31 - 22:00' },
+  ]
+};
 
 const eventTypes = {
   abertura: { label: 'Abertura', color: 'bg-spiritual-blue text-white' },
@@ -156,6 +164,9 @@ const ScheduleTable = () => {
                   <div className="text-xs opacity-75">
                     {date.toLocaleDateString('pt-BR', { weekday: 'short' })}
                   </div>
+                  <div className="text-xs opacity-60 mt-1">
+                    {date.toLocaleDateString('pt-BR', { month: 'short', year: '2-digit' })}
+                  </div>
                 </Button>
               ))}
             </div>
@@ -172,68 +183,143 @@ const ScheduleTable = () => {
           </CardHeader>
           <CardContent className="p-0">
             <div className="overflow-x-auto">
-              <table className="w-full">
-                <thead>
-                  <tr className="border-b bg-muted/50">
-                    <th className="text-left p-4 font-semibold">Horário</th>
-                    <th className="text-left p-4 font-semibold">Eventos</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {timeSlots.map((slot) => {
-                    const slotEvents = getEventsForSlot(
-                      slot.id, 
-                      currentDate.toISOString().split('T')[0]
-                    );
-                    
-                    return (
-                      <tr key={slot.id} className="border-b hover:bg-muted/30 transition-colors">
-                        <td className="p-4 font-medium text-muted-foreground">
-                          {slot.label}
-                        </td>
-                        <td className="p-4">
-                          {slotEvents.length > 0 ? (
-                            <div className="flex flex-wrap gap-2">
-                              {slotEvents.map((event) => (
-                                 <div 
-                                   key={event.id} 
-                                   className={`${eventTypes[event.type].color} px-3 py-2 text-sm font-medium rounded-md flex items-center gap-2`}
-                                 >
-                                   <span>
-                                     {eventTypes[event.type].label}: {event.title}
-                                   </span>
-                                   <div className="flex items-center gap-1">
-                                     <Button
-                                       size="sm"
-                                       variant="ghost"
-                                       className="h-6 w-6 p-0 hover:bg-white/20"
-                                       onClick={() => handleEditEvent(event)}
-                                     >
-                                       <Edit className="h-3 w-3" />
-                                     </Button>
-                                     <Button
-                                       size="sm"
-                                       variant="ghost"
-                                       className="h-6 w-6 p-0 hover:bg-red-500/20"
-                                       onClick={() => deleteEvent(event.id)}
-                                     >
-                                       <Trash2 className="h-3 w-3" />
-                                     </Button>
+              {/* Manhã */}
+              <div className="border-b">
+                <div className="bg-muted/30 px-4 py-2">
+                  <h4 className="font-semibold text-foreground">Manhã</h4>
+                </div>
+                <table className="w-full">
+                  <thead>
+                    <tr className="border-b bg-muted/50">
+                      <th className="text-left p-4 font-semibold">Horário</th>
+                      <th className="text-left p-4 font-semibold">Eventos</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {timeSlots.manha.map((slot) => {
+                      const slotEvents = getEventsForSlot(
+                        slot.id, 
+                        currentDate.toISOString().split('T')[0]
+                      );
+                      
+                      return (
+                        <tr key={slot.id} className="border-b hover:bg-muted/30 transition-colors">
+                          <td className="p-4 font-medium text-muted-foreground">
+                            {slot.label}
+                          </td>
+                          <td className="p-4">
+                            {slotEvents.length > 0 ? (
+                              <div className="flex flex-wrap gap-2">
+                                {slotEvents.map((event) => (
+                                   <div 
+                                     key={event.id} 
+                                     className={`${eventTypes[event.type].color} px-3 py-2 text-sm font-medium rounded-md flex items-center gap-2`}
+                                   >
+                                     <span>
+                                       {eventTypes[event.type].label}: {event.title}
+                                     </span>
+                                     <div className="flex items-center gap-1">
+                                       <Button
+                                         size="sm"
+                                         variant="ghost"
+                                         className="h-6 w-6 p-0 hover:bg-white/20"
+                                         onClick={() => handleEditEvent(event)}
+                                       >
+                                         <Edit className="h-3 w-3" />
+                                       </Button>
+                                       <Button
+                                         size="sm"
+                                         variant="ghost"
+                                         className="h-6 w-6 p-0 hover:bg-red-500/20"
+                                         onClick={() => deleteEvent(event.id)}
+                                       >
+                                         <Trash2 className="h-3 w-3" />
+                                       </Button>
+                                     </div>
                                    </div>
-                                 </div>
-                              ))}
-                            </div>
-                          ) : (
-                            <span className="text-muted-foreground italic">
-                              Nenhum evento agendado
-                            </span>
-                          )}
-                        </td>
-                      </tr>
-                    );
-                  })}
-                </tbody>
-              </table>
+                                ))}
+                              </div>
+                            ) : (
+                              <span className="text-muted-foreground italic">
+                                Nenhum evento agendado
+                              </span>
+                            )}
+                          </td>
+                        </tr>
+                      );
+                    })}
+                  </tbody>
+                </table>
+              </div>
+
+              {/* Noite */}
+              <div>
+                <div className="bg-muted/30 px-4 py-2">
+                  <h4 className="font-semibold text-foreground">Noite</h4>
+                </div>
+                <table className="w-full">
+                  <thead>
+                    <tr className="border-b bg-muted/50">
+                      <th className="text-left p-4 font-semibold">Horário</th>
+                      <th className="text-left p-4 font-semibold">Eventos</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {timeSlots.noite.map((slot) => {
+                      const slotEvents = getEventsForSlot(
+                        slot.id, 
+                        currentDate.toISOString().split('T')[0]
+                      );
+                      
+                      return (
+                        <tr key={slot.id} className="border-b hover:bg-muted/30 transition-colors">
+                          <td className="p-4 font-medium text-muted-foreground">
+                            {slot.label}
+                          </td>
+                          <td className="p-4">
+                            {slotEvents.length > 0 ? (
+                              <div className="flex flex-wrap gap-2">
+                                {slotEvents.map((event) => (
+                                   <div 
+                                     key={event.id} 
+                                     className={`${eventTypes[event.type].color} px-3 py-2 text-sm font-medium rounded-md flex items-center gap-2`}
+                                   >
+                                     <span>
+                                       {eventTypes[event.type].label}: {event.title}
+                                     </span>
+                                     <div className="flex items-center gap-1">
+                                       <Button
+                                         size="sm"
+                                         variant="ghost"
+                                         className="h-6 w-6 p-0 hover:bg-white/20"
+                                         onClick={() => handleEditEvent(event)}
+                                       >
+                                         <Edit className="h-3 w-3" />
+                                       </Button>
+                                       <Button
+                                         size="sm"
+                                         variant="ghost"
+                                         className="h-6 w-6 p-0 hover:bg-red-500/20"
+                                         onClick={() => deleteEvent(event.id)}
+                                       >
+                                         <Trash2 className="h-3 w-3" />
+                                       </Button>
+                                     </div>
+                                   </div>
+                                ))}
+                              </div>
+                            ) : (
+                              <span className="text-muted-foreground italic">
+                                Nenhum evento agendado
+                              </span>
+                            )}
+                          </td>
+                        </tr>
+                      );
+                    })}
+                  </tbody>
+                </table>
+              </div>
             </div>
           </CardContent>
         </Card>
@@ -249,7 +335,7 @@ const ScheduleTable = () => {
         onUpdateEvent={updateEvent}
         editingEvent={editingEvent}
         selectedDate={currentDate.toISOString().split('T')[0]}
-        timeSlots={timeSlots}
+        timeSlots={[...timeSlots.manha, ...timeSlots.noite]}
       />
     </div>
   );
