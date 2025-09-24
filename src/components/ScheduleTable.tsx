@@ -2,6 +2,7 @@ import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
+import { Label } from "@/components/ui/label";
 import { CalendarDays, Clock, Plus, Edit, Trash2 } from "lucide-react";
 import { AddEventDialog } from "@/components/AddEventDialog";
 import logoIgreja from "@/assets/logo-igreja.png";
@@ -42,20 +43,24 @@ const ScheduleTable = () => {
   const [selectedDate, setSelectedDate] = useState(0);
   const [isAddDialogOpen, setIsAddDialogOpen] = useState(false);
   const [editingEvent, setEditingEvent] = useState<Event | null>(null);
+  const [currentYear, setCurrentYear] = useState(new Date().getFullYear());
+  const [currentMonth, setCurrentMonth] = useState(new Date().getMonth());
 
-  // Generate 30 days starting from today, organized by weeks (Monday to Sunday)
+  // Generate 30 days starting from selected month and year, organized by weeks (Monday to Sunday)
   const generateDates = () => {
     const dates = [];
-    const today = new Date();
     
-    // Find the Monday of the current week
-    const dayOfWeek = today.getDay();
+    // Get first day of the selected month
+    const firstDayOfMonth = new Date(currentYear, currentMonth, 1);
+    
+    // Find the Monday of the week that contains the first day of the month
+    const dayOfWeek = firstDayOfMonth.getDay();
     const mondayOffset = dayOfWeek === 0 ? -6 : 1 - dayOfWeek; // Sunday = 0, so we need -6
-    const startDate = new Date(today);
-    startDate.setDate(today.getDate() + mondayOffset);
+    const startDate = new Date(firstDayOfMonth);
+    startDate.setDate(firstDayOfMonth.getDate() + mondayOffset);
     
-    // Generate 30 days from the Monday of current week
-    for (let i = 0; i < 30; i++) {
+    // Generate 42 days (6 weeks) from the Monday to show full calendar grid
+    for (let i = 0; i < 42; i++) {
       const date = new Date(startDate);
       date.setDate(startDate.getDate() + i);
       dates.push(date);
@@ -146,29 +151,92 @@ const ScheduleTable = () => {
               </Button>
             </div>
             
+            {/* Month/Year Navigation */}
+            <div className="flex items-center justify-between mb-6">
+              <div className="flex items-center gap-4">
+                <div className="flex items-center gap-2">
+                  <Label htmlFor="month">Mês:</Label>
+                  <select 
+                    id="month"
+                    value={currentMonth} 
+                    onChange={(e) => {
+                      setCurrentMonth(Number(e.target.value));
+                      setSelectedDate(0);
+                    }}
+                    className="px-3 py-1 border rounded-md bg-background"
+                  >
+                    {Array.from({ length: 12 }, (_, i) => (
+                      <option key={i} value={i}>
+                        {new Date(2024, i, 1).toLocaleDateString('pt-BR', { month: 'long' })}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+                
+                <div className="flex items-center gap-2">
+                  <Label htmlFor="year">Ano:</Label>
+                  <select 
+                    id="year"
+                    value={currentYear} 
+                    onChange={(e) => {
+                      setCurrentYear(Number(e.target.value));
+                      setSelectedDate(0);
+                    }}
+                    className="px-3 py-1 border rounded-md bg-background"
+                  >
+                    {Array.from({ length: 11 }, (_, i) => (
+                      <option key={i} value={2020 + i}>
+                        {2020 + i}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+              </div>
+              
+              <Button 
+                onClick={() => {
+                  const today = new Date();
+                  setCurrentYear(today.getFullYear());
+                  setCurrentMonth(today.getMonth());
+                  setSelectedDate(0);
+                }}
+                variant="outline"
+                className="text-sm"
+              >
+                Hoje
+              </Button>
+            </div>
+            
             <div className="grid grid-cols-7 gap-2">
-              {dates.map((date, index) => (
-                <Button
-                  key={index}
-                  variant={selectedDate === index ? "default" : "outline"}
-                  onClick={() => setSelectedDate(index)}
-                  className={`p-3 h-auto flex flex-col items-center ${
-                    selectedDate === index 
-                      ? 'bg-gradient-spiritual text-white shadow-holy' 
-                      : 'hover:bg-muted'
-                  }`}
-                >
-                  <div className="text-sm font-medium">
-                    {date.toLocaleDateString('pt-BR', { day: '2-digit' })}
-                  </div>
-                  <div className="text-xs opacity-75">
-                    {date.toLocaleDateString('pt-BR', { weekday: 'short' })}
-                  </div>
-                  <div className="text-xs opacity-60 mt-1">
-                    {date.toLocaleDateString('pt-BR', { month: 'short', year: '2-digit' })}
-                  </div>
-                </Button>
-              ))}
+              {dates.map((date, index) => {
+                const isCurrentMonth = date.getMonth() === currentMonth;
+                const isToday = date.toDateString() === new Date().toDateString();
+                
+                return (
+                  <Button
+                    key={index}
+                    variant={selectedDate === index ? "default" : "outline"}
+                    onClick={() => setSelectedDate(index)}
+                    className={`p-3 h-auto flex flex-col items-center ${
+                      selectedDate === index 
+                        ? 'bg-gradient-spiritual text-white shadow-holy' 
+                        : isCurrentMonth 
+                          ? 'hover:bg-muted' 
+                          : 'text-muted-foreground/50 hover:bg-muted/50'
+                    } ${isToday && selectedDate !== index ? 'ring-2 ring-primary' : ''}`}
+                  >
+                    <div className="text-sm font-medium">
+                      {date.toLocaleDateString('pt-BR', { day: '2-digit' })}
+                    </div>
+                    <div className="text-xs opacity-75">
+                      {date.toLocaleDateString('pt-BR', { weekday: 'short' })}
+                    </div>
+                    <div className="text-xs opacity-60 mt-1">
+                      {date.toLocaleDateString('pt-BR', { month: 'short', year: '2-digit' })}
+                    </div>
+                  </Button>
+                );
+              })}
             </div>
           </CardContent>
         </Card>
