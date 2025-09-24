@@ -36,11 +36,11 @@ All colors MUST be HSL.
     --input: 237 31% 91%;
     --ring: 237 85% 55%;
 
-    /* Custom design tokens */
-    --spiritual-blue: 210 100% 75%;
-    --divine-gold: 0 84% 60%;
-    --holy-purple: 210 100% 75%;
-    --celestial-light: 210 50% 98%;
+    /* Custom design tokens - Red and Light Blue theme */
+    --spiritual-blue: 200 100% 80%;
+    --divine-gold: 0 85% 65%;
+    --holy-purple: 200 100% 80%;
+    --celestial-light: 200 50% 98%;
     
     --gradient-spiritual: linear-gradient(135deg, hsl(var(--spiritual-blue)), hsl(var(--divine-gold)));
     --gradient-divine: linear-gradient(45deg, hsl(var(--divine-gold)), hsl(var(--spiritual-blue)));
@@ -99,10 +99,10 @@ All colors MUST be HSL.
     --input: 237 32% 15%;
     --ring: 237 85% 65%;
 
-    /* Dark mode custom tokens */
-    --spiritual-blue: 210 100% 80%;
-    --divine-gold: 0 84% 65%;
-    --holy-purple: 210 100% 80%;
+    /* Dark mode custom tokens - Red and Light Blue theme */
+    --spiritual-blue: 200 100% 85%;
+    --divine-gold: 0 85% 70%;
+    --holy-purple: 200 100% 85%;
     --celestial-light: 237 84% 8%;
     --sidebar-background: 240 5.9% 10%;
     --sidebar-foreground: 240 4.8% 95.9%;

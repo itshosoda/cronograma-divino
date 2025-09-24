@@ -33,7 +33,7 @@ const timeSlots = {
 
 const eventTypes = {
   abertura: { label: 'Abertura', color: 'bg-spiritual-blue text-white' },
-  oferta: { label: 'Oferta', color: 'bg-divine-gold text-foreground' },
+  oferta: { label: 'Oferta', color: 'bg-divine-gold text-white' },
   louvor: { label: 'Louvor', color: 'bg-holy-purple text-white' },
   pregacao: { label: 'Pregação', color: 'bg-gradient-spiritual text-white' },
 };
@@ -155,7 +155,7 @@ const ScheduleTable = () => {
             <div className="flex items-center justify-between mb-6">
               <div className="flex items-center gap-4">
                 <div className="flex items-center gap-2">
-                  <Label htmlFor="month">Mês:</Label>
+                  <label htmlFor="month" className="text-sm font-medium">Mês:</label>
                   <select 
                     id="month"
                     value={currentMonth} 
@@ -163,7 +163,7 @@ const ScheduleTable = () => {
                       setCurrentMonth(Number(e.target.value));
                       setSelectedDate(0);
                     }}
-                    className="px-3 py-1 border rounded-md bg-background"
+                    className="px-3 py-1 border border-border rounded-md bg-card text-card-foreground"
                   >
                     {Array.from({ length: 12 }, (_, i) => (
                       <option key={i} value={i}>
@@ -174,7 +174,7 @@ const ScheduleTable = () => {
                 </div>
                 
                 <div className="flex items-center gap-2">
-                  <Label htmlFor="year">Ano:</Label>
+                  <label htmlFor="year" className="text-sm font-medium">Ano:</label>
                   <select 
                     id="year"
                     value={currentYear} 
@@ -182,7 +182,7 @@ const ScheduleTable = () => {
                       setCurrentYear(Number(e.target.value));
                       setSelectedDate(0);
                     }}
-                    className="px-3 py-1 border rounded-md bg-background"
+                    className="px-3 py-1 border border-border rounded-md bg-card text-card-foreground"
                   >
                     {Array.from({ length: 11 }, (_, i) => (
                       <option key={i} value={2020 + i}>
