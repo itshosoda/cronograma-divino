@@ -9,7 +9,7 @@ import logoIgreja from "@/assets/logo-igreja.png";
 
 export interface Event {
   id: string;
-  type: 'abertura' | 'oferta' | 'louvor' | 'pregacao';
+  type: 'abertura' | 'louvor' | 'oferta' | 'conexao' | 'pregacao' | 'apelo' | 'bencao';
   title: string;
   timeSlot: string;
   date: string;
@@ -17,25 +17,42 @@ export interface Event {
 }
 
 const timeSlots = {
-  manha: [
-    { id: '08:00-09:00', label: '08:00 - 09:00' },
-    { id: '09:00-10:00', label: '09:00 - 10:00' },
-    { id: '10:00-11:00', label: '10:00 - 11:00' },
-    { id: '11:00-12:00', label: '11:00 - 12:00' },
+  quinta: [
+    { id: '19:30-19:45', label: '19:30 - 19:45' },
+    { id: '19:45-19:55', label: '19:45 - 19:55' },
+    { id: '19:55-20:05', label: '19:55 - 20:05' },
+    { id: '20:05-20:30', label: '20:05 - 20:30' },
+    { id: '20:30-20:40', label: '20:30 - 20:40' },
+    { id: '20:40', label: '20:40' },
   ],
-  noite: [
-    { id: '19:00-20:30', label: '19:00 - 20:30' },
-    { id: '20:30-21:00', label: '20:30 - 21:00' },
-    { id: '21:00-21:30', label: '21:00 - 21:30' },
-    { id: '21:31-22:00', label: '21:31 - 22:00' },
+  domingo_manha: [
+    { id: '09:15-09:20', label: '09:15 - 09:20' },
+    { id: '09:20-09:45', label: '09:20 - 09:45' },
+    { id: '09:45-09:50', label: '09:45 - 09:50' },
+    { id: '09:50-09:55', label: '09:50 - 09:55' },
+    { id: '09:55-10:30', label: '09:55 - 10:30' },
+    { id: '10:30-10:45', label: '10:30 - 10:45' },
+    { id: '10:45', label: '10:45' },
+  ],
+  domingo_noite: [
+    { id: '18:30-18:35', label: '18:30 - 18:35' },
+    { id: '18:35-19:05', label: '18:35 - 19:05' },
+    { id: '19:05-19:10', label: '19:05 - 19:10' },
+    { id: '19:10-19:15', label: '19:10 - 19:15' },
+    { id: '19:15-20:10', label: '19:15 - 20:10' },
+    { id: '20:10-20:30', label: '20:10 - 20:30' },
+    { id: '20:30', label: '20:30' },
   ]
 };
 
 const eventTypes = {
   abertura: { label: 'Abertura', color: 'bg-spiritual-blue text-white' },
-  oferta: { label: 'Oferta', color: 'bg-divine-gold text-white' },
   louvor: { label: 'Louvor', color: 'bg-holy-purple text-white' },
-  pregacao: { label: 'Pregação', color: 'bg-gradient-spiritual text-white' },
+  oferta: { label: 'Oferta', color: 'bg-divine-gold text-white' },
+  conexao: { label: 'Conexão', color: 'bg-gradient-spiritual text-white' },
+  pregacao: { label: 'Pregação', color: 'bg-gradient-divine text-white' },
+  apelo: { label: 'Apelo+Ministração Final', color: 'bg-spiritual-blue text-white' },
+  bencao: { label: 'Benção Apostólica', color: 'bg-holy-purple text-white' },
 };
 
 const ScheduleTable = () => {
@@ -251,10 +268,10 @@ const ScheduleTable = () => {
           </CardHeader>
           <CardContent className="p-0">
             <div className="overflow-x-auto">
-              {/* Manhã */}
+              {/* Quinta-feira */}
               <div className="border-b">
                 <div className="bg-muted/30 px-4 py-2">
-                  <h4 className="font-semibold text-foreground">Manhã</h4>
+                  <h4 className="font-semibold text-foreground">Quinta-feira</h4>
                 </div>
                 <table className="w-full">
                   <thead>
@@ -264,7 +281,7 @@ const ScheduleTable = () => {
                     </tr>
                   </thead>
                   <tbody>
-                    {timeSlots.manha.map((slot) => {
+                    {timeSlots.quinta.map((slot) => {
                       const slotEvents = getEventsForSlot(
                         slot.id, 
                         currentDate.toISOString().split('T')[0]
@@ -320,10 +337,10 @@ const ScheduleTable = () => {
                 </table>
               </div>
 
-              {/* Noite */}
-              <div>
+              {/* Domingo Manhã */}
+              <div className="border-b">
                 <div className="bg-muted/30 px-4 py-2">
-                  <h4 className="font-semibold text-foreground">Noite</h4>
+                  <h4 className="font-semibold text-foreground">Domingo - Manhã</h4>
                 </div>
                 <table className="w-full">
                   <thead>
@@ -333,7 +350,76 @@ const ScheduleTable = () => {
                     </tr>
                   </thead>
                   <tbody>
-                    {timeSlots.noite.map((slot) => {
+                    {timeSlots.domingo_manha.map((slot) => {
+                      const slotEvents = getEventsForSlot(
+                        slot.id, 
+                        currentDate.toISOString().split('T')[0]
+                      );
+                      
+                      return (
+                        <tr key={slot.id} className="border-b hover:bg-muted/30 transition-colors">
+                          <td className="p-4 font-medium text-muted-foreground">
+                            {slot.label}
+                          </td>
+                          <td className="p-4">
+                            {slotEvents.length > 0 ? (
+                              <div className="flex flex-wrap gap-2">
+                                {slotEvents.map((event) => (
+                                   <div 
+                                     key={event.id} 
+                                     className={`${eventTypes[event.type].color} px-3 py-2 text-sm font-medium rounded-md flex items-center gap-2`}
+                                   >
+                                     <span>
+                                       {eventTypes[event.type].label}: {event.title}
+                                     </span>
+                                     <div className="flex items-center gap-1">
+                                       <Button
+                                         size="sm"
+                                         variant="ghost"
+                                         className="h-6 w-6 p-0 hover:bg-white/20"
+                                         onClick={() => handleEditEvent(event)}
+                                       >
+                                         <Edit className="h-3 w-3" />
+                                       </Button>
+                                       <Button
+                                         size="sm"
+                                         variant="ghost"
+                                         className="h-6 w-6 p-0 hover:bg-red-500/20"
+                                         onClick={() => deleteEvent(event.id)}
+                                       >
+                                         <Trash2 className="h-3 w-3" />
+                                       </Button>
+                                     </div>
+                                   </div>
+                                ))}
+                              </div>
+                            ) : (
+                              <span className="text-muted-foreground italic">
+                                Nenhum evento agendado
+                              </span>
+                            )}
+                          </td>
+                        </tr>
+                      );
+                    })}
+                  </tbody>
+                </table>
+              </div>
+
+              {/* Domingo Noite */}
+              <div>
+                <div className="bg-muted/30 px-4 py-2">
+                  <h4 className="font-semibold text-foreground">Domingo - Noite</h4>
+                </div>
+                <table className="w-full">
+                  <thead>
+                    <tr className="border-b bg-muted/50">
+                      <th className="text-left p-4 font-semibold">Horário</th>
+                      <th className="text-left p-4 font-semibold">Eventos</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {timeSlots.domingo_noite.map((slot) => {
                       const slotEvents = getEventsForSlot(
                         slot.id, 
                         currentDate.toISOString().split('T')[0]
@@ -403,7 +489,7 @@ const ScheduleTable = () => {
         onUpdateEvent={updateEvent}
         editingEvent={editingEvent}
         selectedDate={currentDate.toISOString().split('T')[0]}
-        timeSlots={[...timeSlots.manha, ...timeSlots.noite]}
+        timeSlots={[...timeSlots.quinta, ...timeSlots.domingo_manha, ...timeSlots.domingo_noite]}
       />
     </div>
   );

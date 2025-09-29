@@ -140,9 +140,12 @@ export const AddEventDialog = ({
                 </SelectTrigger>
                 <SelectContent>
                   <SelectItem value="abertura">🙏 Abertura</SelectItem>
-                  <SelectItem value="oferta">💰 Oferta</SelectItem>
                   <SelectItem value="louvor">🎵 Louvor</SelectItem>
+                  <SelectItem value="oferta">💰 Oferta</SelectItem>
+                  <SelectItem value="conexao">🤝 Conexão</SelectItem>
                   <SelectItem value="pregacao">📖 Pregação</SelectItem>
+                  <SelectItem value="apelo">🙌 Apelo+Ministração Final</SelectItem>
+                  <SelectItem value="bencao">✨ Benção Apostólica</SelectItem>
                 </SelectContent>
               </Select>
             </div>
