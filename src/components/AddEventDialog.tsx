@@ -27,8 +27,37 @@ interface AddEventDialogProps {
   onUpdateEvent?: (event: Event) => void;
   editingEvent?: Event | null;
   selectedDate: string;
-  timeSlots: { id: string; label: string }[];
+  timeSlots?: { id: string; label: string }[];
 }
+
+const timeSlotsByDay = {
+  quinta: [
+    { id: '19:30-19:45', label: '19:30 - 19:45' },
+    { id: '19:45-19:55', label: '19:45 - 19:55' },
+    { id: '19:55-20:05', label: '19:55 - 20:05' },
+    { id: '20:05-20:30', label: '20:05 - 20:30' },
+    { id: '20:30-20:40', label: '20:30 - 20:40' },
+    { id: '20:40', label: '20:40' },
+  ],
+  domingo_manha: [
+    { id: '09:15-09:20', label: '09:15 - 09:20' },
+    { id: '09:20-09:45', label: '09:20 - 09:45' },
+    { id: '09:45-09:50', label: '09:45 - 09:50' },
+    { id: '09:50-09:55', label: '09:50 - 09:55' },
+    { id: '09:55-10:30', label: '09:55 - 10:30' },
+    { id: '10:30-10:45', label: '10:30 - 10:45' },
+    { id: '10:45', label: '10:45' },
+  ],
+  domingo_noite: [
+    { id: '18:30-18:35', label: '18:30 - 18:35' },
+    { id: '18:35-19:05', label: '18:35 - 19:05' },
+    { id: '19:05-19:10', label: '19:05 - 19:10' },
+    { id: '19:10-19:15', label: '19:10 - 19:15' },
+    { id: '19:15-20:10', label: '19:15 - 20:10' },
+    { id: '20:10-20:30', label: '20:10 - 20:30' },
+    { id: '20:30', label: '20:30' },
+  ]
+};
 
 export const AddEventDialog = ({
   isOpen,
@@ -37,13 +66,14 @@ export const AddEventDialog = ({
   onUpdateEvent,
   editingEvent,
   selectedDate,
-  timeSlots,
 }: AddEventDialogProps) => {
   const [formData, setFormData] = useState({
     type: '' as Event['type'] | '',
     title: '',
     timeSlot: '',
     description: '',
+    vocacionados: '',
+    cultoDay: '' as 'quinta' | 'domingo_manha' | 'domingo_noite' | '',
   });
 
   // Populate form when editing
@@ -54,6 +84,8 @@ export const AddEventDialog = ({
         title: editingEvent.title,
         timeSlot: editingEvent.timeSlot,
         description: editingEvent.description || '',
+        vocacionados: editingEvent.vocacionados || '',
+        cultoDay: editingEvent.cultoDay || '',
       });
     } else {
       setFormData({
@@ -61,6 +93,8 @@ export const AddEventDialog = ({
         title: '',
         timeSlot: '',
         description: '',
+        vocacionados: '',
+        cultoDay: '',
       });
     }
   }, [editingEvent, isOpen]);
@@ -68,7 +102,7 @@ export const AddEventDialog = ({
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     
-    if (!formData.type || !formData.title || !formData.timeSlot) {
+    if (!formData.type || !formData.title || !formData.timeSlot || !formData.cultoDay) {
       return;
     }
 
@@ -80,6 +114,8 @@ export const AddEventDialog = ({
         title: formData.title,
         timeSlot: formData.timeSlot,
         description: formData.description,
+        vocacionados: formData.vocacionados,
+        cultoDay: formData.cultoDay,
       });
     } else {
       // Add new event
@@ -89,6 +125,8 @@ export const AddEventDialog = ({
         timeSlot: formData.timeSlot,
         date: selectedDate,
         description: formData.description,
+        vocacionados: formData.vocacionados,
+        cultoDay: formData.cultoDay,
       });
     }
 
@@ -98,6 +136,8 @@ export const AddEventDialog = ({
       title: '',
       timeSlot: '',
       description: '',
+      vocacionados: '',
+      cultoDay: '',
     });
     
     onOpenChange(false);
@@ -109,9 +149,13 @@ export const AddEventDialog = ({
       title: '',
       timeSlot: '',
       description: '',
+      vocacionados: '',
+      cultoDay: '',
     });
     onOpenChange(false);
   };
+
+  const availableTimeSlots = formData.cultoDay ? timeSlotsByDay[formData.cultoDay] : [];
 
   return (
     <Dialog open={isOpen} onOpenChange={handleClose}>
@@ -127,6 +171,25 @@ export const AddEventDialog = ({
         
         <form onSubmit={handleSubmit}>
           <div className="grid gap-4 py-4">
+            <div className="space-y-2">
+              <Label htmlFor="cultoDay">Dia do Culto</Label>
+              <Select 
+                value={formData.cultoDay} 
+                onValueChange={(value: 'quinta' | 'domingo_manha' | 'domingo_noite') => {
+                  setFormData({ ...formData, cultoDay: value, timeSlot: '' });
+                }}
+              >
+                <SelectTrigger>
+                  <SelectValue placeholder="Selecione o dia do culto" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="quinta">Quinta-feira</SelectItem>
+                  <SelectItem value="domingo_manha">Domingo - Manhã</SelectItem>
+                  <SelectItem value="domingo_noite">Domingo - Noite</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+
             <div className="space-y-2">
               <Label htmlFor="type">Cronograma</Label>
               <Select 
@@ -151,7 +214,7 @@ export const AddEventDialog = ({
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="title">Vocacionado</Label>
+              <Label htmlFor="title">Título</Label>
               <Input
                 id="title"
                 value={formData.title}
@@ -162,18 +225,29 @@ export const AddEventDialog = ({
             </div>
 
             <div className="space-y-2">
+              <Label htmlFor="vocacionados">Vocacionados</Label>
+              <Input
+                id="vocacionados"
+                value={formData.vocacionados}
+                onChange={(e) => setFormData({ ...formData, vocacionados: e.target.value })}
+                placeholder="Ex: João Silva, Maria Santos..."
+              />
+            </div>
+
+            <div className="space-y-2">
               <Label htmlFor="timeSlot">Horário</Label>
               <Select 
                 value={formData.timeSlot} 
                 onValueChange={(value) => 
                   setFormData({ ...formData, timeSlot: value })
                 }
+                disabled={!formData.cultoDay}
               >
                 <SelectTrigger>
-                  <SelectValue placeholder="Selecione o horário" />
+                  <SelectValue placeholder={formData.cultoDay ? "Selecione o horário" : "Selecione primeiro o dia do culto"} />
                 </SelectTrigger>
                 <SelectContent>
-                  {timeSlots.map((slot) => (
+                  {availableTimeSlots.map((slot) => (
                     <SelectItem key={slot.id} value={slot.id}>
                       {slot.label}
                     </SelectItem>
@@ -201,7 +275,7 @@ export const AddEventDialog = ({
             <Button 
               type="submit" 
               className="bg-gradient-spiritual hover:bg-gradient-divine"
-              disabled={!formData.type || !formData.title || !formData.timeSlot}
+              disabled={!formData.type || !formData.title || !formData.timeSlot || !formData.cultoDay}
             >
               {editingEvent ? 'Salvar Alterações' : 'Adicionar Evento'}
             </Button>

@@ -14,6 +14,8 @@ export interface Event {
   timeSlot: string;
   date: string;
   description?: string;
+  vocacionados?: string;
+  cultoDay?: 'quinta' | 'domingo_manha' | 'domingo_noite';
 }
 
 const timeSlots = {
@@ -300,9 +302,16 @@ const ScheduleTable = () => {
                                      key={event.id} 
                                      className={`${eventTypes[event.type].color} px-3 py-2 text-sm font-medium rounded-md flex items-center gap-2`}
                                    >
-                                     <span>
-                                       {eventTypes[event.type].label}: {event.title}
-                                     </span>
+                                     <div className="flex flex-col">
+                                       <span>
+                                         {eventTypes[event.type].label}: {event.title}
+                                       </span>
+                                       {event.vocacionados && (
+                                         <span className="text-xs opacity-90 mt-1">
+                                           {event.vocacionados}
+                                         </span>
+                                       )}
+                                     </div>
                                      <div className="flex items-center gap-1">
                                        <Button
                                          size="sm"
@@ -369,9 +378,16 @@ const ScheduleTable = () => {
                                      key={event.id} 
                                      className={`${eventTypes[event.type].color} px-3 py-2 text-sm font-medium rounded-md flex items-center gap-2`}
                                    >
-                                     <span>
-                                       {eventTypes[event.type].label}: {event.title}
-                                     </span>
+                                     <div className="flex flex-col">
+                                       <span>
+                                         {eventTypes[event.type].label}: {event.title}
+                                       </span>
+                                       {event.vocacionados && (
+                                         <span className="text-xs opacity-90 mt-1">
+                                           {event.vocacionados}
+                                         </span>
+                                       )}
+                                     </div>
                                      <div className="flex items-center gap-1">
                                        <Button
                                          size="sm"
@@ -438,9 +454,16 @@ const ScheduleTable = () => {
                                      key={event.id} 
                                      className={`${eventTypes[event.type].color} px-3 py-2 text-sm font-medium rounded-md flex items-center gap-2`}
                                    >
-                                     <span>
-                                       {eventTypes[event.type].label}: {event.title}
-                                     </span>
+                                     <div className="flex flex-col">
+                                       <span>
+                                         {eventTypes[event.type].label}: {event.title}
+                                       </span>
+                                       {event.vocacionados && (
+                                         <span className="text-xs opacity-90 mt-1">
+                                           {event.vocacionados}
+                                         </span>
+                                       )}
+                                     </div>
                                      <div className="flex items-center gap-1">
                                        <Button
                                          size="sm"
@@ -489,7 +512,6 @@ const ScheduleTable = () => {
         onUpdateEvent={updateEvent}
         editingEvent={editingEvent}
         selectedDate={currentDate.toISOString().split('T')[0]}
-        timeSlots={[...timeSlots.quinta, ...timeSlots.domingo_manha, ...timeSlots.domingo_noite]}
       />
     </div>
   );
