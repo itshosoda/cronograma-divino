@@ -102,7 +102,9 @@ export const AddEventDialog = ({
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     
-    if (!formData.type || !formData.timeSlot || !formData.cultoDay) {
+    // timeSlot is not required for 'escala' type
+    const isTimeSlotRequired = formData.type !== 'escala';
+    if (!formData.type || !formData.cultoDay || (isTimeSlotRequired && !formData.timeSlot)) {
       return;
     }
 
@@ -211,27 +213,29 @@ export const AddEventDialog = ({
               </Select>
             </div>
 
-            <div className="space-y-2">
-              <Label htmlFor="timeSlot">Horário</Label>
-              <Select 
-                value={formData.timeSlot} 
-                onValueChange={(value) => 
-                  setFormData({ ...formData, timeSlot: value })
-                }
-                disabled={!formData.cultoDay}
-              >
-                <SelectTrigger>
-                  <SelectValue placeholder={formData.cultoDay ? "Selecione o horário" : "Selecione primeiro o dia do culto"} />
-                </SelectTrigger>
-                <SelectContent>
-                  {availableTimeSlots.map((slot) => (
-                    <SelectItem key={slot.id} value={slot.id}>
-                      {slot.label}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-            </div>
+            {formData.type !== 'escala' && (
+              <div className="space-y-2">
+                <Label htmlFor="timeSlot">Horário</Label>
+                <Select 
+                  value={formData.timeSlot} 
+                  onValueChange={(value) => 
+                    setFormData({ ...formData, timeSlot: value })
+                  }
+                  disabled={!formData.cultoDay}
+                >
+                  <SelectTrigger>
+                    <SelectValue placeholder={formData.cultoDay ? "Selecione o horário" : "Selecione primeiro o dia do culto"} />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {availableTimeSlots.map((slot) => (
+                      <SelectItem key={slot.id} value={slot.id}>
+                        {slot.label}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              </div>
+            )}
 
             <div className="space-y-2">
               <Label htmlFor="vocacionados">Vocacionados</Label>
@@ -262,7 +266,7 @@ export const AddEventDialog = ({
             <Button 
               type="submit" 
               className="bg-gradient-spiritual hover:bg-gradient-divine"
-              disabled={!formData.type || !formData.timeSlot || !formData.cultoDay}
+              disabled={!formData.type || !formData.cultoDay || (formData.type !== 'escala' && !formData.timeSlot)}
             >
               {editingEvent ? 'Salvar Alterações' : 'Adicionar Evento'}
             </Button>
