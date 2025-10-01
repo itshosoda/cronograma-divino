@@ -188,8 +188,8 @@ export const AddEventDialog = ({
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="type">Escala de Vocacionados</Label>
-              <Select 
+              <Label htmlFor="type">Cronograma</Label>
+              <Select
                 value={formData.type} 
                 onValueChange={(value: Event['type']) => 
                   setFormData({ ...formData, type: value })
@@ -211,7 +211,7 @@ export const AddEventDialog = ({
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="title">Título</Label>
+              <Label htmlFor="title">Escala de Vocacionados</Label>
               <Input
                 id="title"
                 value={formData.title}
