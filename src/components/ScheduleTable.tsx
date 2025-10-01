@@ -97,6 +97,14 @@ const ScheduleTable = () => {
     );
   };
 
+  const getVocacionadosForDay = (cultoDay: 'quinta' | 'domingo_manha' | 'domingo_noite', date: string) => {
+    return events.filter(event => 
+      event.cultoDay === cultoDay && 
+      event.date === date &&
+      event.vocacionados
+    );
+  };
+
   const addEvent = (newEvent: Omit<Event, 'id'>) => {
     const event: Event = {
       ...newEvent,
@@ -344,6 +352,19 @@ const ScheduleTable = () => {
                     })}
                   </tbody>
                 </table>
+                {/* Vocacionados Escalados - Quinta */}
+                {getVocacionadosForDay('quinta', currentDate.toISOString().split('T')[0]).length > 0 && (
+                  <div className="bg-gradient-spiritual/10 px-4 py-3 border-t">
+                    <h5 className="font-semibold text-sm text-foreground mb-2">Vocacionados Escalados</h5>
+                    <div className="flex flex-wrap gap-2">
+                      {getVocacionadosForDay('quinta', currentDate.toISOString().split('T')[0]).map((event) => (
+                        <Badge key={event.id} variant="secondary" className="text-xs">
+                          {eventTypes[event.type].label}: {event.vocacionados}
+                        </Badge>
+                      ))}
+                    </div>
+                  </div>
+                )}
               </div>
 
               {/* Domingo Manhã */}
@@ -420,6 +441,19 @@ const ScheduleTable = () => {
                     })}
                   </tbody>
                 </table>
+                {/* Vocacionados Escalados - Domingo Manhã */}
+                {getVocacionadosForDay('domingo_manha', currentDate.toISOString().split('T')[0]).length > 0 && (
+                  <div className="bg-gradient-spiritual/10 px-4 py-3 border-t">
+                    <h5 className="font-semibold text-sm text-foreground mb-2">Vocacionados Escalados</h5>
+                    <div className="flex flex-wrap gap-2">
+                      {getVocacionadosForDay('domingo_manha', currentDate.toISOString().split('T')[0]).map((event) => (
+                        <Badge key={event.id} variant="secondary" className="text-xs">
+                          {eventTypes[event.type].label}: {event.vocacionados}
+                        </Badge>
+                      ))}
+                    </div>
+                  </div>
+                )}
               </div>
 
               {/* Domingo Noite */}
@@ -496,6 +530,19 @@ const ScheduleTable = () => {
                     })}
                   </tbody>
                 </table>
+                {/* Vocacionados Escalados - Domingo Noite */}
+                {getVocacionadosForDay('domingo_noite', currentDate.toISOString().split('T')[0]).length > 0 && (
+                  <div className="bg-gradient-spiritual/10 px-4 py-3 border-t">
+                    <h5 className="font-semibold text-sm text-foreground mb-2">Vocacionados Escalados</h5>
+                    <div className="flex flex-wrap gap-2">
+                      {getVocacionadosForDay('domingo_noite', currentDate.toISOString().split('T')[0]).map((event) => (
+                        <Badge key={event.id} variant="secondary" className="text-xs">
+                          {eventTypes[event.type].label}: {event.vocacionados}
+                        </Badge>
+                      ))}
+                    </div>
+                  </div>
+                )}
               </div>
             </div>
           </CardContent>
