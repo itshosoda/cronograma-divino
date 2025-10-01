@@ -160,13 +160,10 @@ export const AddEventDialog = ({
   return (
     <Dialog open={isOpen} onOpenChange={handleClose}>
       <DialogContent className="sm:max-w-[425px]">
-        <DialogHeader>
-          <DialogTitle className="text-xl font-bold bg-gradient-spiritual bg-clip-text text-transparent">
+        <DialogHeader className="sr-only">
+          <DialogTitle>
             {editingEvent ? 'Editar Evento' : 'Adicionar Novo Evento'}
           </DialogTitle>
-          <DialogDescription>
-            {editingEvent ? 'Modifique as informações do evento.' : 'Preencha as informações para criar um novo evento na programação.'}
-          </DialogDescription>
         </DialogHeader>
         
         <form onSubmit={handleSubmit}>
@@ -191,7 +188,7 @@ export const AddEventDialog = ({
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="type">Cronograma</Label>
+              <Label htmlFor="type">Escala de Vocacionados</Label>
               <Select 
                 value={formData.type} 
                 onValueChange={(value: Event['type']) => 
