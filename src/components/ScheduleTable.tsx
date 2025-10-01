@@ -9,7 +9,7 @@ import logoIgreja from "@/assets/logo-igreja.png";
 
 export interface Event {
   id: string;
-  type: 'abertura' | 'louvor' | 'oferta' | 'conexao' | 'pregacao' | 'apelo' | 'bencao';
+  type: 'abertura' | 'louvor' | 'oferta' | 'conexao' | 'pregacao' | 'apelo' | 'bencao' | 'escala';
   title: string;
   timeSlot: string;
   date: string;
@@ -55,6 +55,7 @@ const eventTypes = {
   pregacao: { label: 'Pregação', color: 'bg-gradient-divine text-white' },
   apelo: { label: 'Apelo+Ministração Final', color: 'bg-spiritual-blue text-white' },
   bencao: { label: 'Benção Apostólica', color: 'bg-holy-purple text-white' },
+  escala: { label: 'Escala de Vocacionados', color: 'bg-divine-gold text-white' },
 };
 
 const ScheduleTable = () => {

@@ -102,7 +102,7 @@ export const AddEventDialog = ({
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     
-    if (!formData.type || !formData.title || !formData.timeSlot || !formData.cultoDay) {
+    if (!formData.type || !formData.timeSlot || !formData.cultoDay) {
       return;
     }
 
@@ -206,29 +206,9 @@ export const AddEventDialog = ({
                   <SelectItem value="pregacao">📖 Pregação</SelectItem>
                   <SelectItem value="apelo">🙌 Apelo+Ministração Final</SelectItem>
                   <SelectItem value="bencao">✨ Benção Apostólica</SelectItem>
+                  <SelectItem value="escala">👥 Escala de Vocacionados</SelectItem>
                 </SelectContent>
               </Select>
-            </div>
-
-            <div className="space-y-2">
-              <Label htmlFor="title">Escala de Vocacionados</Label>
-              <Input
-                id="title"
-                value={formData.title}
-                onChange={(e) => setFormData({ ...formData, title: e.target.value })}
-                placeholder="Ex: Louvor de Abertura, Pregação sobre Fé..."
-                required
-              />
-            </div>
-
-            <div className="space-y-2">
-              <Label htmlFor="vocacionados">Vocacionados</Label>
-              <Input
-                id="vocacionados"
-                value={formData.vocacionados}
-                onChange={(e) => setFormData({ ...formData, vocacionados: e.target.value })}
-                placeholder="Ex: João Silva, Maria Santos..."
-              />
             </div>
 
             <div className="space-y-2">
@@ -254,6 +234,16 @@ export const AddEventDialog = ({
             </div>
 
             <div className="space-y-2">
+              <Label htmlFor="vocacionados">Vocacionados</Label>
+              <Input
+                id="vocacionados"
+                value={formData.vocacionados}
+                onChange={(e) => setFormData({ ...formData, vocacionados: e.target.value })}
+                placeholder="Ex: João Silva, Maria Santos..."
+              />
+            </div>
+
+            <div className="space-y-2">
               <Label htmlFor="description">Descrição (Opcional)</Label>
               <Textarea
                 id="description"
@@ -272,7 +262,7 @@ export const AddEventDialog = ({
             <Button 
               type="submit" 
               className="bg-gradient-spiritual hover:bg-gradient-divine"
-              disabled={!formData.type || !formData.title || !formData.timeSlot || !formData.cultoDay}
+              disabled={!formData.type || !formData.timeSlot || !formData.cultoDay}
             >
               {editingEvent ? 'Salvar Alterações' : 'Adicionar Evento'}
             </Button>
